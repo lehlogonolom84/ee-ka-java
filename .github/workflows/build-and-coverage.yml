@@ -1,0 +1,60 @@
+name: Build and Code Coverage
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Restore dependencies
+        run: mvn -B -ntp dependency:go-offline
+
+      - name: Build
+        run: mvn -B -ntp clean compile -DskipTests
+
+      - name: Run tests with coverage
+        run: mvn -B -ntp test
+
+      - name: Check 100% code coverage
+        run: |
+          COVERAGE_FILE=target/site/jacoco/jacoco.xml
+
+          if [ ! -f "$COVERAGE_FILE" ]; then
+            echo "Error: No coverage file found at $COVERAGE_FILE"
+            exit 1
+          fi
+
+          echo "Coverage file: $COVERAGE_FILE"
+
+          LINE_COUNTER=$(grep 'counter type="LINE"' "$COVERAGE_FILE" | tail -1)
+          MISSED=$(echo "$LINE_COUNTER" | sed -E 's/.*missed="([0-9]+)".*/\1/')
+          COVERED=$(echo "$LINE_COUNTER" | sed -E 's/.*covered="([0-9]+)".*/\1/')
+          TOTAL=$((MISSED + COVERED))
+
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "Error: Total lines is 0; cannot evaluate coverage"
+            exit 1
+          fi
+
+          COVERAGE_INT=$((COVERED * 100 / TOTAL))
+          echo "Line coverage: ${COVERAGE_INT}% (${COVERED}/${TOTAL})"
+
+          if [ "$MISSED" -ne 0 ]; then
+            echo "Error: Coverage is ${COVERAGE_INT}%, but 100% is required"
+            exit 1
+          fi
+
+          echo "Success: Code coverage is 100%"
