@@ -4,12 +4,11 @@
 
 ## Solution Insight
 
-This project employs industry best practices such as SOLID principles, Clean Code, TDD, and continuous integration.
-The build and code coverage badge above reflects the project's CI pipeline, which automatically runs tests and measures code coverage on each commit.
+This project follows industry best practices, including SOLID principles, Clean Code, Test-Driven Development (TDD), and Continuous Integration (CI).
+The build and code coverage badges above reflect the CI pipeline, which automatically executes tests and measures code coverage on every commit to ensure quality and reliability.
 
-The folder structure is kept simple to make it easy to navigate given the project's size and purpose.
-
-Complex architectural layers from patterns such as Clean Architecture or DDD were intentionally avoided in favor of the KISS principle.
+More complex architectural patterns, such as Clean Architecture or Domain-Driven Design (DDD), were deliberately avoided in favor of the KISS (Keep It Simple, Stupid) principle. 
+Given the project’s size and purpose, the folder structure is intentionally kept simple to ensure clarity, maintainability, and ease of navigation without introducing unnecessary architectural complexity.
 
 The project comprises the following modules in the main folder:
 
