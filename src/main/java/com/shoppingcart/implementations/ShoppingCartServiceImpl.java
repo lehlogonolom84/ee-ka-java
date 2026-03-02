@@ -87,7 +87,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                 shoppingCart.remove(productName);
             } else {
-
+eee
                 shoppingCartItem.setQuantity(newQuantity);
             }
         }
