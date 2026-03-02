@@ -1,7 +1,7 @@
 package com.shoppingcart.caching;
 
 import com.shoppingcart.interfaces.caching.Cache;
-import com.shoppingcart.model.CacheEntry;
+import com.shoppingcart.valueobjects.CacheEntry;
 
 import java.time.Duration;
 import java.time.Instant;

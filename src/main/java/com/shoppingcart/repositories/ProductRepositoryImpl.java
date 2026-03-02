@@ -1,4 +1,4 @@
-package com.shoppingcart.repository;
+package com.shoppingcart.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shoppingcart.constant.CachePrefix;
@@ -6,7 +6,7 @@ import com.shoppingcart.constant.ProductName;
 import com.shoppingcart.interfaces.caching.Cache;
 import com.shoppingcart.interfaces.configuration.ConfigProvider;
 import com.shoppingcart.interfaces.repository.ProductRepository;
-import com.shoppingcart.model.ProductInfo;
+import com.shoppingcart.valueobjects.ProductInfo;
 
 import java.net.URI;
 import java.net.http.HttpClient;

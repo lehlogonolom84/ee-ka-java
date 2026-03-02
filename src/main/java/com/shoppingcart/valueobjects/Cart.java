@@ -1,4 +1,4 @@
-package com.shoppingcart.model;
+package com.shoppingcart.valueobjects;
 
 import com.shoppingcart.constant.DecimalPlaces;
 
@@ -6,9 +6,18 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Cart {
+    private String cartId;
     private double tax;
     private CartItem[] items;
     private double subTotal;
+
+    public String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
+    }
 
     public double getTax() {
         return tax;
@@ -22,7 +31,7 @@ public class Cart {
         return items;
     }
 
-    public void setItems(com.shoppingcart.model.CartItem[] items) {
+    public void setItems(com.shoppingcart.valueobjects.CartItem[] items) {
         this.items = items;
     }
 

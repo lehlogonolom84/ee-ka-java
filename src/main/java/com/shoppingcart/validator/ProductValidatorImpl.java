@@ -1,7 +1,7 @@
 package com.shoppingcart.validator;
 
 import com.shoppingcart.interfaces.repository.ProductRepository;
-import com.shoppingcart.model.CartItem;
+import com.shoppingcart.valueobjects.CartItem;
 
 import java.util.Arrays;
 import java.util.Map;

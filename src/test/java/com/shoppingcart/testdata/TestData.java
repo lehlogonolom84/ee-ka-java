@@ -1,7 +1,7 @@
 package com.shoppingcart.testdata;
 
 import com.shoppingcart.constant.ProductName;
-import com.shoppingcart.model.ProductInfo;
+import com.shoppingcart.valueobjects.ProductInfo;
 
 public  class TestData {
 

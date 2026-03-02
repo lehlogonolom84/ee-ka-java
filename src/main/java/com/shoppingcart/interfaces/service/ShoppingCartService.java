@@ -1,10 +1,10 @@
 package com.shoppingcart.interfaces.service;
 
-import com.shoppingcart.model.Cart;
-import com.shoppingcart.model.CartActionResult;
+import com.shoppingcart.valueobjects.Cart;
+import com.shoppingcart.valueobjects.CartActionResult;
 
 public interface ShoppingCartService {
-    CartActionResult addItem(String productName, int quantity);
-    CartActionResult removeItem(String productName, int quantity);
-    Cart getCart();
+    CartActionResult addItem(String cartId, String productName, int quantity);
+    CartActionResult removeItem(String cartId, String productName, int quantity);
+    Cart getCart(String cartId);
 }

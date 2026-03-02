@@ -1,13 +1,13 @@
-package com.shoppingcart.service;
+package com.shoppingcart.services;
 
 import com.shoppingcart.constant.DecimalPlaces;
 import com.shoppingcart.interfaces.configuration.ConfigProvider;
 import com.shoppingcart.interfaces.repository.ProductRepository;
 import com.shoppingcart.interfaces.service.ShoppingCartService;
 import com.shoppingcart.interfaces.validator.ProductValidator;
-import com.shoppingcart.model.Cart;
-import com.shoppingcart.model.CartActionResult;
-import com.shoppingcart.model.CartItem;
+import com.shoppingcart.valueobjects.Cart;
+import com.shoppingcart.valueobjects.CartActionResult;
+import com.shoppingcart.valueobjects.CartItem;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    Map<String, CartItem> shoppingCart;
+    Map<String, Map<String, CartItem>> carts;
 
     ProductRepository productRepository;
 
@@ -24,18 +24,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     double taxRate;
 
-    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductRepository productRepository,ProductValidator productValidator) {
+    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductRepository productRepository, ProductValidator productValidator) {
+        this.productRepository = productRepository;
+        this.productValidator = productValidator;
+        this.carts = new HashMap<>();
+        this.taxRate = configProvider.getTaxPercentage() / 100;
+    }
 
-        this.productRepository=productRepository;
-        this.productValidator=productValidator;
-
-        shoppingCart = new HashMap<>();
-        taxRate = configProvider.getTaxPercentage()/100;
+    private Map<String, CartItem> getOrCreateCart(String cartId) {
+        return carts.computeIfAbsent(cartId, k -> new HashMap<>());
     }
 
     @Override
-    public CartActionResult addItem(String productName, int quantity) {
-
+    public CartActionResult addItem(String cartId, String productName, int quantity) {
         var addActionResult = new CartActionResult();
 
         var validationResults = productValidator.validateAdd(productName, quantity);
@@ -45,6 +46,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return addActionResult;
         }
 
+        var shoppingCart = getOrCreateCart(cartId);
         var price = productRepository.get(productName);
 
         if (!shoppingCart.containsKey(productName)) {
@@ -61,10 +63,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartActionResult removeItem(String productName, int quantity) {
-
+    public CartActionResult removeItem(String cartId, String productName, int quantity) {
         var removeActionResult = new CartActionResult();
 
+        var shoppingCart = getOrCreateCart(cartId);
         var validationResults = productValidator.validateRemoval(productName, quantity, shoppingCart);
 
         if (validationResults != null && !validationResults.isEmpty()) {
@@ -73,7 +75,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         if (shoppingCart.containsKey(productName)) {
-            var shoppingCartItem = this.shoppingCart.get(productName);
+            var shoppingCartItem = shoppingCart.get(productName);
             int newQuantity = shoppingCartItem.getQuantity() - quantity;
             if (newQuantity <= 0) {
                 shoppingCart.remove(productName);
@@ -85,9 +87,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public Cart getCart() {
+    public Cart getCart(String cartId) {
+        var shoppingCart = getOrCreateCart(cartId);
 
         Cart cart = new Cart();
+        cart.setCartId(cartId);
         cart.setItems(shoppingCart.values().toArray(new CartItem[0]));
 
         double subTotal = shoppingCart.values().stream()
