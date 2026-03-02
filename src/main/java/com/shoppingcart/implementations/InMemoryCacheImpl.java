@@ -1,14 +1,14 @@
-package com.shoppingcart.caching;
+package com.shoppingcart.implementations;
 
-import com.shoppingcart.interfaces.caching.Cache;
-import com.shoppingcart.valueobjects.CacheEntry;
+import com.shoppingcart.interfaces.Cache;
+import com.shoppingcart.models.CacheEntry;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryCache implements Cache {
+public class InMemoryCacheImpl implements Cache {
 
     private final Map<String, CacheEntry> cache = new HashMap<>();
     private final Object sync = new Object();

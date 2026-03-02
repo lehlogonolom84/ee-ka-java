@@ -1,4 +1,4 @@
-package com.shoppingcart.valueobjects;
+package com.shoppingcart.models;
 
 import com.shoppingcart.constant.DecimalPlaces;
 
@@ -31,7 +31,7 @@ public class Cart {
         return items;
     }
 
-    public void setItems(com.shoppingcart.valueobjects.CartItem[] items) {
+    public void setItems(com.shoppingcart.models.CartItem[] items) {
         this.items = items;
     }
 

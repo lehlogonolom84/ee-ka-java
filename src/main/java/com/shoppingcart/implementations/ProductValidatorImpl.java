@@ -1,17 +1,18 @@
-package com.shoppingcart.validator;
+package com.shoppingcart.implementations;
 
-import com.shoppingcart.interfaces.repository.ProductRepository;
-import com.shoppingcart.valueobjects.CartItem;
+import com.shoppingcart.interfaces.ProductValidator;
+import com.shoppingcart.interfaces.ProductCatalog;
+import com.shoppingcart.models.CartItem;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class ProductValidatorImpl implements com.shoppingcart.interfaces.validator.ProductValidator {
+public class ProductValidatorImpl implements ProductValidator {
 
-    private final ProductRepository productRepository;
+    private final ProductCatalog productCatalog;
 
-    public ProductValidatorImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductValidatorImpl(ProductCatalog productCatalog) {
+        this.productCatalog = productCatalog;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class ProductValidatorImpl implements com.shoppingcart.interfaces.validat
     }
 
     private boolean isValidProduct(String productName) {
-        String[] validProducts = productRepository.getAllProductNames();
+        String[] validProducts = productCatalog.getAllProductNames();
         return Arrays.asList(validProducts).contains(productName);
     }
 }

@@ -1,15 +1,15 @@
-package com.shoppingcart.unit.service;
+package com.shoppingcart.unit;
 
-import com.shoppingcart.caching.InMemoryCache;
-import com.shoppingcart.configuration.InCodeConfigProvider;
+import com.shoppingcart.implementations.InMemoryCacheImpl;
+import com.shoppingcart.implementations.InCodeConfigProviderImpl;
 import com.shoppingcart.constant.DecimalPlaces;
 import com.shoppingcart.constant.ProductName;
-import com.shoppingcart.valueobjects.Cart;
-import com.shoppingcart.valueobjects.CartActionResult;
-import com.shoppingcart.valueobjects.CartItem;
-import com.shoppingcart.repositories.ProductRepositoryImpl;
-import com.shoppingcart.services.ShoppingCartServiceImpl;
-import com.shoppingcart.validator.ProductValidatorImpl;
+import com.shoppingcart.models.Cart;
+import com.shoppingcart.models.CartActionResult;
+import com.shoppingcart.models.CartItem;
+import com.shoppingcart.implementations.ProductCatalogImpl;
+import com.shoppingcart.implementations.ShoppingCartServiceImpl;
+import com.shoppingcart.implementations.ProductValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +27,8 @@ public class ShoppingCartServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        var configProvider = new InCodeConfigProvider();
-        var productRepository = new ProductRepositoryImpl(new InMemoryCache(), configProvider);
+        var configProvider = new InCodeConfigProviderImpl();
+        var productRepository = new ProductCatalogImpl(new InMemoryCacheImpl(), configProvider);
         var productValidator = new ProductValidatorImpl(productRepository);
         sut = new ShoppingCartServiceImpl(configProvider, productRepository, productValidator);
     }

@@ -1,4 +1,4 @@
-package com.shoppingcart.valueobjects;
+package com.shoppingcart.models;
 
 import java.time.Instant;
 

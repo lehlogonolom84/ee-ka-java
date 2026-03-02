@@ -1,13 +1,13 @@
-package com.shoppingcart.unit.validator;
+package com.shoppingcart.unit;
 
-import com.shoppingcart.caching.InMemoryCache;
-import com.shoppingcart.configuration.InCodeConfigProvider;
+import com.shoppingcart.implementations.InMemoryCacheImpl;
+import com.shoppingcart.implementations.InCodeConfigProviderImpl;
 import com.shoppingcart.constant.ProductName;
-import com.shoppingcart.valueobjects.CartItem;
-import com.shoppingcart.valueobjects.ProductInfo;
-import com.shoppingcart.repositories.ProductRepositoryImpl;
+import com.shoppingcart.models.CartItem;
+import com.shoppingcart.models.ProductInfo;
+import com.shoppingcart.implementations.ProductCatalogImpl;
 import com.shoppingcart.testdata.TestData;
-import com.shoppingcart.validator.ProductValidatorImpl;
+import com.shoppingcart.implementations.ProductValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductValidatorTest {
 
     private ProductValidatorImpl sut;
-    private ProductRepositoryImpl productRepository;
+    private ProductCatalogImpl productRepository;
     private ProductInfo[] knownProducts;
 
     @BeforeEach
     void setUp() {
 
-        productRepository = new ProductRepositoryImpl(new InMemoryCache(), new InCodeConfigProvider());
+        productRepository = new ProductCatalogImpl(new InMemoryCacheImpl(), new InCodeConfigProviderImpl());
         knownProducts = TestData.getKnownProductInfo();
         sut = new ProductValidatorImpl(productRepository);
     }

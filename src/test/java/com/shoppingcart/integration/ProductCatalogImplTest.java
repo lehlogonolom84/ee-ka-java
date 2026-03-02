@@ -1,13 +1,13 @@
-package com.shoppingcart.integration.repository;
+package com.shoppingcart.integration;
 
-import com.shoppingcart.caching.InMemoryCache;
-import com.shoppingcart.configuration.InCodeConfigProvider;
+import com.shoppingcart.implementations.InMemoryCacheImpl;
+import com.shoppingcart.implementations.InCodeConfigProviderImpl;
 import com.shoppingcart.constant.CachePrefix;
 import com.shoppingcart.constant.ProductName;
-import com.shoppingcart.interfaces.caching.Cache;
-import com.shoppingcart.interfaces.configuration.ConfigProvider;
-import com.shoppingcart.valueobjects.ProductInfo;
-import com.shoppingcart.repositories.ProductRepositoryImpl;
+import com.shoppingcart.interfaces.Cache;
+import com.shoppingcart.interfaces.ConfigProvider;
+import com.shoppingcart.models.ProductInfo;
+import com.shoppingcart.implementations.ProductCatalogImpl;
 import com.shoppingcart.testdata.TestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,18 +17,18 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ProductRepositoryImplTest {
+class ProductCatalogImplTest {
 
-    private ProductRepositoryImpl productRepository;
+    private ProductCatalogImpl productCatalog;
     private Cache cache;
     private ConfigProvider configProvider;
 
     @BeforeEach
     void setUp() {
 
-        cache = new InMemoryCache();
-        configProvider = new InCodeConfigProvider();
-        productRepository = new ProductRepositoryImpl(cache, configProvider);
+        cache = new InMemoryCacheImpl();
+        configProvider = new InCodeConfigProviderImpl();
+        productCatalog = new ProductCatalogImpl(cache, configProvider);
     }
 
     @Test
@@ -39,7 +39,7 @@ class ProductRepositoryImplTest {
 
         // Act & Assert
         for (ProductInfo expectedProduct : knownProducts) {
-            double actualPrice = productRepository.get(expectedProduct.getTitle());
+            double actualPrice = productCatalog.get(expectedProduct.getTitle());
             assertThat(actualPrice)
                     .as("Price for product '%s'", expectedProduct.getTitle())
                     .isEqualTo(expectedProduct.getPrice());
@@ -53,8 +53,8 @@ class ProductRepositoryImplTest {
         String productName = ProductName.CHEERIOS;
 
         // Act
-        double firstPrice = productRepository.get(productName);
-        double secondPrice = productRepository.get(productName);
+        double firstPrice = productCatalog.get(productName);
+        double secondPrice = productCatalog.get(productName);
 
         // Assert
         assertThat(firstPrice).isEqualTo(secondPrice);
@@ -63,11 +63,11 @@ class ProductRepositoryImplTest {
     @Test
     void get_forEachProductFromGetAllProductNames_returnsValidPrice() {
         // Arrange
-        String[] allProducts = productRepository.getAllProductNames();
+        String[] allProducts = productCatalog.getAllProductNames();
 
         // Act & Assert
         for (String productName : allProducts) {
-            double price = productRepository.get(productName);
+            double price = productCatalog.get(productName);
             assertThat(price)
                     .as("Price for '%s' should be positive", productName)
                     .isPositive();
@@ -80,9 +80,9 @@ class ProductRepositoryImplTest {
         String productName = ProductName.WEETABIX;
 
         // Act
-        double price1 = productRepository.get(productName);
-        double price2 = productRepository.get(productName);
-        double price3 = productRepository.get(productName);
+        double price1 = productCatalog.get(productName);
+        double price2 = productCatalog.get(productName);
+        double price3 = productCatalog.get(productName);
 
         // Assert
         assertThat(price1).isEqualTo(price2).isEqualTo(price3);
@@ -95,7 +95,7 @@ class ProductRepositoryImplTest {
         String cacheKey = CachePrefix.PRODUCT_PRICE + productName;
 
         // Act
-        double priceFromApi = productRepository.get(productName);
+        double priceFromApi = productCatalog.get(productName);
         Double cachedPrice = cache.get(cacheKey, Double.class);
 
         // Assert
@@ -113,7 +113,7 @@ class ProductRepositoryImplTest {
         cache.set(cacheKey, expectedCachedPrice, Duration.ofMinutes(5));
 
         // Act
-        double actualPrice = productRepository.get(productName);
+        double actualPrice = productCatalog.get(productName);
 
         // Assert
         assertThat(actualPrice).isEqualTo(expectedCachedPrice);
@@ -128,8 +128,8 @@ class ProductRepositoryImplTest {
         String cacheKey2 = CachePrefix.PRODUCT_PRICE + productName2;
 
         // Act
-        double price1 = productRepository.get(productName1);
-        double price2 = productRepository.get(productName2);
+        double price1 = productCatalog.get(productName1);
+        double price2 = productCatalog.get(productName2);
 
         // Assert
         Double cachedPrice1 = cache.get(cacheKey1, Double.class);
@@ -146,7 +146,7 @@ class ProductRepositoryImplTest {
         String productName = null;
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for:");
     }
@@ -157,7 +157,7 @@ class ProductRepositoryImplTest {
         String productName = "";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for:");
     }
@@ -168,7 +168,7 @@ class ProductRepositoryImplTest {
         String productName = "   ";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for:");
     }
@@ -179,7 +179,7 @@ class ProductRepositoryImplTest {
         String productName = "nonexistent-product-xyz";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for: nonexistent-product-xyz");
     }
@@ -190,7 +190,7 @@ class ProductRepositoryImplTest {
         String productName = "product<>with/special?chars";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for:");
     }
@@ -201,7 +201,7 @@ class ProductRepositoryImplTest {
         String productName = "product with spaces";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for:");
     }
@@ -212,7 +212,7 @@ class ProductRepositoryImplTest {
         String productName = "CHEERIOS";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for: CHEERIOS");
     }
@@ -223,7 +223,7 @@ class ProductRepositoryImplTest {
         String productName = "Cheerios";
 
         // Act & Assert
-        assertThatThrownBy(() -> productRepository.get(productName))
+        assertThatThrownBy(() -> productCatalog.get(productName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Unable to fetch product price for: Cheerios");
     }
@@ -241,7 +241,7 @@ class ProductRepositoryImplTest {
         int expectedCount = 5;
 
         // Act
-        String[] actualProducts = productRepository.getAllProductNames();
+        String[] actualProducts = productCatalog.getAllProductNames();
 
         // Assert
         assertThat(actualProducts).containsExactly(expectedProducts);
@@ -254,7 +254,7 @@ class ProductRepositoryImplTest {
         // Arrange - nothing to arrange
 
         // Act
-        String[] productNames = productRepository.getAllProductNames();
+        String[] productNames = productCatalog.getAllProductNames();
 
         // Assert
         assertThat(productNames).contains(ProductName.CHEERIOS);
@@ -265,7 +265,7 @@ class ProductRepositoryImplTest {
         // Arrange - nothing to arrange
 
         // Act
-        String[] productNames = productRepository.getAllProductNames();
+        String[] productNames = productCatalog.getAllProductNames();
 
         // Assert
         assertThat(productNames).doesNotHaveDuplicates();
@@ -276,7 +276,7 @@ class ProductRepositoryImplTest {
         // Arrange - nothing to arrange
 
         // Act
-        String[] productNames = productRepository.getAllProductNames();
+        String[] productNames = productCatalog.getAllProductNames();
 
         // Assert
         assertThat(productNames).allMatch(name -> name != null && !name.isEmpty());
@@ -287,8 +287,8 @@ class ProductRepositoryImplTest {
         // Arrange - nothing to arrange
 
         // Act
-        String[] firstCall = productRepository.getAllProductNames();
-        String[] secondCall = productRepository.getAllProductNames();
+        String[] firstCall = productCatalog.getAllProductNames();
+        String[] secondCall = productCatalog.getAllProductNames();
 
         // Assert
         assertThat(firstCall).isNotSameAs(secondCall);
@@ -300,7 +300,7 @@ class ProductRepositoryImplTest {
         // Arrange - nothing to arrange
 
         // Act
-        String[] productNames = productRepository.getAllProductNames();
+        String[] productNames = productCatalog.getAllProductNames();
 
         // Assert
         for (String productName : productNames) {

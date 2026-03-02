@@ -1,13 +1,13 @@
-package com.shoppingcart.services;
+package com.shoppingcart.implementations;
 
 import com.shoppingcart.constant.DecimalPlaces;
-import com.shoppingcart.interfaces.configuration.ConfigProvider;
-import com.shoppingcart.interfaces.repository.ProductRepository;
-import com.shoppingcart.interfaces.service.ShoppingCartService;
-import com.shoppingcart.interfaces.validator.ProductValidator;
-import com.shoppingcart.valueobjects.Cart;
-import com.shoppingcart.valueobjects.CartActionResult;
-import com.shoppingcart.valueobjects.CartItem;
+import com.shoppingcart.interfaces.ConfigProvider;
+import com.shoppingcart.interfaces.ProductCatalog;
+import com.shoppingcart.interfaces.ShoppingCartService;
+import com.shoppingcart.interfaces.ProductValidator;
+import com.shoppingcart.models.Cart;
+import com.shoppingcart.models.CartActionResult;
+import com.shoppingcart.models.CartItem;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,14 +18,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     Map<String, Map<String, CartItem>> carts;
 
-    ProductRepository productRepository;
+    ProductCatalog productCatalog;
 
     ProductValidator productValidator;
 
     double taxRate;
 
-    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductRepository productRepository, ProductValidator productValidator) {
-        this.productRepository = productRepository;
+    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductCatalog productCatalog, ProductValidator productValidator) {
+        this.productCatalog = productCatalog;
         this.productValidator = productValidator;
         this.carts = new HashMap<>();
         this.taxRate = configProvider.getTaxPercentage() / 100;
@@ -47,7 +47,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         var shoppingCart = getOrCreateCart(cartId);
-        var price = productRepository.get(productName);
+        var price = productCatalog.get(productName);
 
         if (!shoppingCart.containsKey(productName)) {
             var cartItem = new CartItem();

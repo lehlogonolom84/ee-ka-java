@@ -1,4 +1,4 @@
-package com.shoppingcart.interfaces.caching;
+package com.shoppingcart.interfaces;
 
 import java.time.Duration;
 

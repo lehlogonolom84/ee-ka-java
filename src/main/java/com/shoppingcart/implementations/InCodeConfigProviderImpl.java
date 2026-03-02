@@ -1,16 +1,16 @@
-package com.shoppingcart.configuration;
+package com.shoppingcart.implementations;
 
-import com.shoppingcart.interfaces.configuration.ConfigProvider;
+import com.shoppingcart.interfaces.ConfigProvider;
 
 import java.time.Duration;
 
-public class InCodeConfigProvider implements ConfigProvider {
+public class InCodeConfigProviderImpl implements ConfigProvider {
 
     private Duration productCacheDuration;
     private String productBaseUrl;
     private double taxPercentage;
 
-    public InCodeConfigProvider() {
+    public InCodeConfigProviderImpl() {
 
         this.productCacheDuration = Duration.ofMinutes(5);
         this.taxPercentage=12.5;

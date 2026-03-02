@@ -1,4 +1,4 @@
-package com.shoppingcart.valueobjects;
+package com.shoppingcart.models;
 
 public class ProductInfo {
     private String title;

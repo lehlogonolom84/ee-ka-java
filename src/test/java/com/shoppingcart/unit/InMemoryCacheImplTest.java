@@ -1,6 +1,6 @@
-package com.shoppingcart.unit.caching;
+package com.shoppingcart.unit;
 
-import com.shoppingcart.caching.InMemoryCache;
+import com.shoppingcart.implementations.InMemoryCacheImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +9,13 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class InMemoryCacheTest {
+class InMemoryCacheImplTest {
 
-    private InMemoryCache cache;
+    private InMemoryCacheImpl cache;
 
     @BeforeEach
     void setUp() {
-        cache = new InMemoryCache();
+        cache = new InMemoryCacheImpl();
     }
 
     @Test

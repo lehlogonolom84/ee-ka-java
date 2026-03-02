@@ -1,12 +1,12 @@
-package com.shoppingcart.repositories;
+package com.shoppingcart.implementations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shoppingcart.constant.CachePrefix;
 import com.shoppingcart.constant.ProductName;
-import com.shoppingcart.interfaces.caching.Cache;
-import com.shoppingcart.interfaces.configuration.ConfigProvider;
-import com.shoppingcart.interfaces.repository.ProductRepository;
-import com.shoppingcart.valueobjects.ProductInfo;
+import com.shoppingcart.interfaces.Cache;
+import com.shoppingcart.interfaces.ConfigProvider;
+import com.shoppingcart.interfaces.ProductCatalog;
+import com.shoppingcart.models.ProductInfo;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,7 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-public class ProductRepositoryImpl implements ProductRepository {
+public class ProductCatalogImpl implements ProductCatalog {
 
     private final Cache cache;
     private final HttpClient httpClient;
@@ -22,7 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final Duration cacheDuration;
     private final String productBaseUrl;
 
-    public ProductRepositoryImpl(Cache cache, ConfigProvider configProvider) {
+    public ProductCatalogImpl(Cache cache, ConfigProvider configProvider) {
         this.cache = cache;
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
