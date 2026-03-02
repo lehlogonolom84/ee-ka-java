@@ -5,6 +5,10 @@ public class ProductInfo {
     private String title;
     private double price;
 
+
+    public ProductInfo() {
+    }
+
     public ProductInfo(String title, double price) {
 
         this.price=price;
