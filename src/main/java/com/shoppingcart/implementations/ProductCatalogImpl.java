@@ -31,7 +31,7 @@ public class ProductCatalogImpl implements ProductCatalog {
     }
 
     @Override
-    public double get(String productName) {
+    public double getPrice(String productName) {
 
         var cacheKey = CachePrefix.PRODUCT_PRICE + productName;
         var cachedPrice = cache.get(cacheKey, Double.class);
@@ -41,6 +41,7 @@ public class ProductCatalogImpl implements ProductCatalog {
         }
 
         try {
+
             var url = productBaseUrl + "/backend-take-home-test-data/" + productName + ".json";
             var request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -58,10 +59,12 @@ public class ProductCatalogImpl implements ProductCatalog {
             cache.set(cacheKey, product.getPrice(), cacheDuration);
 
             return product.getPrice();
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to fetch product price for: " + productName, e);
-        }
 
+        } catch (Exception e) {
+
+            throw new RuntimeException("Unable to fetch product price for: " + productName, e);
+
+        }
     }
 
     @Override

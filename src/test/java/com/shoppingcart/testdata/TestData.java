@@ -6,6 +6,7 @@ import com.shoppingcart.models.ProductInfo;
 public  class TestData {
 
     public  static ProductInfo[] getKnownProductInfo() {
+
         return new ProductInfo[] {
                 new ProductInfo(ProductName.CHEERIOS,   KnownProductPrices.CHEERIOS),
                 new ProductInfo(ProductName.CORNFLAKES, KnownProductPrices.CORNFLAKES),
@@ -13,5 +14,6 @@ public  class TestData {
                 new ProductInfo(ProductName.SHREDDIES,  KnownProductPrices.SHREDDIES),
                 new ProductInfo(ProductName.WEETABIX,   KnownProductPrices.WEETABIX)
         };
+
     }
 }

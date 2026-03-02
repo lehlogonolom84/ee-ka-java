@@ -11,11 +11,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class InMemoryCacheImplTest {
 
-    private InMemoryCacheImpl cache;
+    private InMemoryCacheImpl sut;
 
     @BeforeEach
     void setUp() {
-        cache = new InMemoryCacheImpl();
+        sut = new InMemoryCacheImpl();
     }
 
     @Test
@@ -26,10 +26,10 @@ class InMemoryCacheImplTest {
         Duration expiration = Duration.ofMinutes(5);
 
         // Act
-        cache.set(key, value, expiration);
+        sut.set(key, value, expiration);
 
         // Assert
-        assertThat(cache.get(key, String.class)).isEqualTo(value);
+        assertThat(sut.get(key, String.class)).isEqualTo(value);
     }
 
     @Test
@@ -41,7 +41,7 @@ class InMemoryCacheImplTest {
         Duration expiration = Duration.ofMinutes(5);
 
         // Act & Assert
-        assertThatThrownBy(() -> cache.set(key, value, expiration))
+        assertThatThrownBy(() -> sut.set(key, value, expiration))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cache key cannot be null or empty.");
     }
@@ -55,7 +55,7 @@ class InMemoryCacheImplTest {
         Duration expiration = Duration.ofMinutes(5);
 
         // Act & Assert
-        assertThatThrownBy(() -> cache.set(key, value, expiration))
+        assertThatThrownBy(() -> sut.set(key, value, expiration))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cache key cannot be null or empty.");
     }
@@ -69,7 +69,7 @@ class InMemoryCacheImplTest {
         Duration expiration = Duration.ofMinutes(5);
 
         // Act & Assert
-        assertThatThrownBy(() -> cache.set(key, value, expiration))
+        assertThatThrownBy(() -> sut.set(key, value, expiration))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cache key cannot be null or empty.");
     }
@@ -81,7 +81,7 @@ class InMemoryCacheImplTest {
         String key = null;
 
         // Act
-        String result = cache.get(key, String.class);
+        String result = sut.get(key, String.class);
 
         // Assert
         assertThat(result).isNull();
@@ -94,7 +94,7 @@ class InMemoryCacheImplTest {
         String key = "";
 
         // Act
-        String result = cache.get(key, String.class);
+        String result = sut.get(key, String.class);
 
         // Assert
         assertThat(result).isNull();
@@ -107,7 +107,7 @@ class InMemoryCacheImplTest {
         String key = "   ";
 
         // Act
-        String result = cache.get(key, String.class);
+        String result = sut.get(key, String.class);
 
         // Assert
         assertThat(result).isNull();
@@ -120,7 +120,7 @@ class InMemoryCacheImplTest {
         String key = "nonexistent";
 
         // Act
-        String result = cache.get(key, String.class);
+        String result = sut.get(key, String.class);
 
         // Assert
         assertThat(result).isNull();
@@ -133,11 +133,11 @@ class InMemoryCacheImplTest {
         String key = "key";
         String value = "value";
         Duration expiration = Duration.ofMillis(50);
-        cache.set(key, value, expiration);
+        sut.set(key, value, expiration);
 
         // Act
         Thread.sleep(100);
-        String result = cache.get(key, String.class);
+        String result = sut.get(key, String.class);
 
         // Assert
         assertThat(result).isNull();
@@ -150,10 +150,10 @@ class InMemoryCacheImplTest {
         String key = "key";
         Integer value = 42;
         Duration expiration = Duration.ofMinutes(5);
-        cache.set(key, value, expiration);
+        sut.set(key, value, expiration);
 
         // Act
-        Integer result = cache.get(key, Integer.class);
+        Integer result = sut.get(key, Integer.class);
 
         // Assert
         assertThat(result).isEqualTo(value);
@@ -167,27 +167,27 @@ class InMemoryCacheImplTest {
         String originalValue = "original";
         String updatedValue = "updated";
         Duration expiration = Duration.ofMinutes(5);
-        cache.set(key, originalValue, expiration);
+        sut.set(key, originalValue, expiration);
 
         // Act
-        cache.set(key, updatedValue, expiration);
+        sut.set(key, updatedValue, expiration);
 
         // Assert
-        assertThat(cache.get(key, String.class)).isEqualTo(updatedValue);
+        assertThat(sut.get(key, String.class)).isEqualTo(updatedValue);
     }
 
     @Test
     void get_withDifferentTypes_returnsCorrectValue() {
 
         // Arrange
-        cache.set("string", "hello", Duration.ofMinutes(5));
-        cache.set("integer", 123, Duration.ofMinutes(5));
-        cache.set("double", 45.67, Duration.ofMinutes(5));
+        sut.set("string", "hello", Duration.ofMinutes(5));
+        sut.set("integer", 123, Duration.ofMinutes(5));
+        sut.set("double", 45.67, Duration.ofMinutes(5));
 
         // Act
-        String stringResult = cache.get("string", String.class);
-        Integer integerResult = cache.get("integer", Integer.class);
-        Double doubleResult = cache.get("double", Double.class);
+        String stringResult = sut.get("string", String.class);
+        Integer integerResult = sut.get("integer", Integer.class);
+        Double doubleResult = sut.get("double", Double.class);
 
         // Assert
         assertThat(stringResult).isEqualTo("hello");

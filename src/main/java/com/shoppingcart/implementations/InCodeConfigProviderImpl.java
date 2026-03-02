@@ -6,32 +6,20 @@ import java.time.Duration;
 
 public class InCodeConfigProviderImpl implements ConfigProvider {
 
-    private Duration productCacheDuration;
-    private String productBaseUrl;
-    private double taxPercentage;
-
-    public InCodeConfigProviderImpl() {
-
-        this.productCacheDuration = Duration.ofMinutes(5);
-        this.taxPercentage=12.5;
-        this.productBaseUrl="https://equalexperts.github.io";
-    }
 
     @Override
     public Duration getProductCacheDuration() {
-        return productCacheDuration;
+        return Duration.ofMinutes(5);
     }
-
 
     @Override
     public String getProductBaseUrl() {
-        return productBaseUrl;
+        return "https://equalexperts.github.io";
     }
-
 
     @Override
     public double getTaxPercentage() {
-        return taxPercentage;
+        return 12.5;
     }
 
 }

@@ -15,6 +15,7 @@ public class InMemoryCacheImpl implements Cache {
 
     @Override
     public <T> void set(String key, T value, Duration expiration) {
+
         if (key == null || key.isBlank()) {
             throw new IllegalArgumentException("Cache key cannot be null or empty.");
         }
@@ -27,7 +28,6 @@ public class InMemoryCacheImpl implements Cache {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T get(String key, Class<T> type) {
         if (key == null || key.isBlank()) {
             return null;

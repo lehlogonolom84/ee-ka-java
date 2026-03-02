@@ -9,7 +9,7 @@ import com.shoppingcart.models.CartActionResult;
 import com.shoppingcart.models.CartItem;
 import com.shoppingcart.implementations.ProductCatalogImpl;
 import com.shoppingcart.implementations.ShoppingCartServiceImpl;
-import com.shoppingcart.implementations.ProductValidatorImpl;
+import com.shoppingcart.implementations.ShoppingCartValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,9 +27,11 @@ public class ShoppingCartServiceImplTest {
 
     @BeforeEach
     void setUp() {
+
         var configProvider = new InCodeConfigProviderImpl();
         var productRepository = new ProductCatalogImpl(new InMemoryCacheImpl(), configProvider);
-        var productValidator = new ProductValidatorImpl(productRepository);
+        var productValidator = new ShoppingCartValidatorImpl(productRepository);
+
         sut = new ShoppingCartServiceImpl(configProvider, productRepository, productValidator);
     }
 
@@ -37,18 +39,18 @@ public class ShoppingCartServiceImplTest {
     void addItem_withValidProductsAndQuantities_returnsCartDetails() {
 
         // Arrange
-        String productOne = ProductName.CORNFLAKES;
-        int productOneQuantity = 1;
-        int productOneQuantityOne = 1;
-        String productTwo = ProductName.WEETABIX;
-        int productTwoQuantity = 1;
-        int expectedCartItemsCount = 2;
+        var productOne = ProductName.CORNFLAKES;
+        var productOneQuantity = 1;
+        var productOneQuantityOne = 1;
+        var productTwo = ProductName.WEETABIX;
+        var productTwoQuantity = 1;
+        var expectedCartItemsCount = 2;
 
-        int expectedProductOneQuantity = productOneQuantity + productOneQuantityOne;
-        int expectedProductTwoQuantity = productTwoQuantity;
+        var expectedProductOneQuantity = productOneQuantity + productOneQuantityOne;
+        var expectedProductTwoQuantity = productTwoQuantity;
 
-        double expectedTax = 1.88;
-        double expectedSubTotal = 15.02;
+        var expectedTax = 1.88;
+        var expectedSubTotal = 15.02;
 
         // Act
         CartActionResult firstAddResult = sut.addItem(TEST_CART_ID, productOne, productOneQuantity);
@@ -79,10 +81,10 @@ public class ShoppingCartServiceImplTest {
     void removeItem_withNonExistingProduct_returnsErrorMessage() {
 
         // Arrange
-        String productOne = ProductName.CORNFLAKES + "nothere";
+        var productOne = ProductName.CORNFLAKES + "nothere";
 
         // Act
-        CartActionResult removeResult = sut.removeItem(TEST_CART_ID, productOne, 1);
+        var removeResult = sut.removeItem(TEST_CART_ID, productOne, 1);
 
         // Assert
         assertFalse(removeResult.isSuccess());
@@ -94,9 +96,9 @@ public class ShoppingCartServiceImplTest {
     void removeItem_withExistingProduct_reducesQuantity() {
 
         // Arrange
-        String productOne = ProductName.CORNFLAKES;
-        int productOneQuantity = 2;
-        int expectedProductOneQuantity = 1;
+        var productOne = ProductName.CORNFLAKES;
+        var productOneQuantity = 2;
+        var expectedProductOneQuantity = 1;
 
         // Act
         CartActionResult addResult = sut.addItem(TEST_CART_ID, productOne, productOneQuantity);
@@ -114,10 +116,10 @@ public class ShoppingCartServiceImplTest {
     void removeItem_withEntireQuantity_removesItemFromCart() {
 
         // Arrange
-        String productOne = ProductName.CORNFLAKES;
-        int productOneQuantity = 1;
-        int removeQuantity = 1;
-        int expectedCartItemsCount = 0;
+        var productOne = ProductName.CORNFLAKES;
+        var productOneQuantity = 1;
+        var removeQuantity = 1;
+        var expectedCartItemsCount = 0;
 
         // Act
         CartActionResult addResult = sut.addItem(TEST_CART_ID, productOne, productOneQuantity);
@@ -136,8 +138,8 @@ public class ShoppingCartServiceImplTest {
     void addItem_withInvalidProduct_returnsErrorMessage() {
 
         // Arrange
-        String invalidProductName = "InvalidProduct";
-        int quantity = 1;
+        var invalidProductName = "InvalidProduct";
+        var quantity = 1;
 
         // Act
         CartActionResult addResult = sut.addItem(TEST_CART_ID, invalidProductName, quantity);
@@ -150,12 +152,13 @@ public class ShoppingCartServiceImplTest {
 
     @Test
     void carts_withDifferentCartIds_areIsolated() {
-        // Arrange
-        String userOneCartId = "user-1";
-        String userTwoCartId = "user-2";
-        String sessionCartId = "session-abc123";
 
-        // Act - add different products to each cart
+        // Arrange
+        var userOneCartId = "user-1";
+        var userTwoCartId = "user-2";
+        var sessionCartId = "session-abc123";
+
+        // Act
         sut.addItem(userOneCartId, ProductName.CORNFLAKES, 2);
         sut.addItem(userTwoCartId, ProductName.WEETABIX, 3);
         sut.addItem(sessionCartId, ProductName.CHEERIOS, 1);
@@ -164,7 +167,7 @@ public class ShoppingCartServiceImplTest {
         Cart userTwoCart = sut.getCart(userTwoCartId);
         Cart sessionCart = sut.getCart(sessionCartId);
 
-        // Assert - each cart should only contain its own items
+        // Assert
         assertEquals(1, userOneCart.getItems().length);
         assertEquals(ProductName.CORNFLAKES, userOneCart.getItems()[0].getProductName());
         assertEquals(2, userOneCart.getItems()[0].getQuantity());
@@ -183,8 +186,9 @@ public class ShoppingCartServiceImplTest {
 
     @Test
     void getCart_returnsCartIdInResponse() {
+
         // Arrange
-        String cartId = "my-unique-cart-id";
+        var cartId = "my-unique-cart-id";
         sut.addItem(cartId, ProductName.CORNFLAKES, 1);
 
         // Act
@@ -195,9 +199,11 @@ public class ShoppingCartServiceImplTest {
     }
 
     private CartItem findItemByProductName(Cart cart, String productName) {
+
         return Arrays.stream(cart.getItems())
                 .filter(item -> item.getProductName().equals(productName))
                 .findFirst()
                 .orElse(null);
+
     }
 }

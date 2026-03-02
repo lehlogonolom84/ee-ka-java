@@ -4,7 +4,7 @@ import com.shoppingcart.constant.DecimalPlaces;
 import com.shoppingcart.interfaces.ConfigProvider;
 import com.shoppingcart.interfaces.ProductCatalog;
 import com.shoppingcart.interfaces.ShoppingCartService;
-import com.shoppingcart.interfaces.ProductValidator;
+import com.shoppingcart.interfaces.ShoppingCartValidator;
 import com.shoppingcart.models.Cart;
 import com.shoppingcart.models.CartActionResult;
 import com.shoppingcart.models.CartItem;
@@ -20,13 +20,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     ProductCatalog productCatalog;
 
-    ProductValidator productValidator;
+    ShoppingCartValidator shoppingCartValidator;
 
     double taxRate;
 
-    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductCatalog productCatalog, ProductValidator productValidator) {
+    public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductCatalog productCatalog, ShoppingCartValidator shoppingCartValidator) {
         this.productCatalog = productCatalog;
-        this.productValidator = productValidator;
+        this.shoppingCartValidator = shoppingCartValidator;
         this.carts = new HashMap<>();
         this.taxRate = configProvider.getTaxPercentage() / 100;
     }
@@ -39,7 +39,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public CartActionResult addItem(String cartId, String productName, int quantity) {
         var addActionResult = new CartActionResult();
 
-        var validationResults = productValidator.validateAdd(productName, quantity);
+        var validationResults = shoppingCartValidator.validateAdd(productName, quantity);
 
         if (validationResults != null && !validationResults.isEmpty()) {
             addActionResult.setMessage(validationResults);
@@ -47,7 +47,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         var shoppingCart = getOrCreateCart(cartId);
-        var price = productCatalog.get(productName);
+        var price = productCatalog.getPrice(productName);
 
         if (!shoppingCart.containsKey(productName)) {
             var cartItem = new CartItem();
@@ -67,7 +67,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         var removeActionResult = new CartActionResult();
 
         var shoppingCart = getOrCreateCart(cartId);
-        var validationResults = productValidator.validateRemoval(productName, quantity, shoppingCart);
+        var validationResults = shoppingCartValidator.validateRemoval(productName, quantity, shoppingCart);
 
         if (validationResults != null && !validationResults.isEmpty()) {
             removeActionResult.setMessage(validationResults);

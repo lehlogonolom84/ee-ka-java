@@ -7,7 +7,7 @@ import com.shoppingcart.models.CartItem;
 import com.shoppingcart.models.ProductInfo;
 import com.shoppingcart.implementations.ProductCatalogImpl;
 import com.shoppingcart.testdata.TestData;
-import com.shoppingcart.implementations.ProductValidatorImpl;
+import com.shoppingcart.implementations.ShoppingCartValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +16,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ProductValidatorTest {
+class ShoppingCartValidatorTest {
 
-    private ProductValidatorImpl sut;
+    private ShoppingCartValidatorImpl sut;
     private ProductCatalogImpl productRepository;
     private ProductInfo[] knownProducts;
 
@@ -27,7 +27,7 @@ class ProductValidatorTest {
 
         productRepository = new ProductCatalogImpl(new InMemoryCacheImpl(), new InCodeConfigProviderImpl());
         knownProducts = TestData.getKnownProductInfo();
-        sut = new ProductValidatorImpl(productRepository);
+        sut = new ShoppingCartValidatorImpl(productRepository);
     }
 
     @Test
@@ -35,7 +35,7 @@ class ProductValidatorTest {
 
         // Arrange
         String productName = null;
-        int quantity = 1;
+        var quantity = 1;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -48,8 +48,8 @@ class ProductValidatorTest {
     void validateAdd_withEmptyProductName_returnsError() {
 
         // Arrange
-        String productName = "";
-        int quantity = 1;
+        var productName = "";
+        var quantity = 1;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -62,8 +62,8 @@ class ProductValidatorTest {
     void validateAdd_withInvalidProductName_returnsError() {
 
         // Arrange
-        String productName = "InvalidProduct";
-        int quantity = 1;
+        var productName = "InvalidProduct";
+        var quantity = 1;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -76,8 +76,8 @@ class ProductValidatorTest {
     void validateAdd_withZeroQuantity_returnsError() {
 
         // Arrange
-        String productName = knownProducts[0].getTitle();
-        int quantity = 0;
+        var productName = knownProducts[0].getTitle();
+        var quantity = 0;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -90,8 +90,8 @@ class ProductValidatorTest {
     void validateAdd_withNegativeQuantity_returnsError() {
 
         // Arrange
-        String productName = knownProducts[0].getTitle();
-        int quantity = -1;
+        var productName = knownProducts[0].getTitle();
+        var quantity = -1;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -105,8 +105,8 @@ class ProductValidatorTest {
     void validateAdd_withValidProductAndQuantity_returnsEmptyString() {
 
         // Arrange
-        String productName = knownProducts[0].getTitle();
-        int quantity = 5;
+        var productName = knownProducts[0].getTitle();
+        var quantity = 5;
 
         // Act
         String result = sut.validateAdd(productName, quantity);
@@ -121,7 +121,7 @@ class ProductValidatorTest {
 
         // Arrange
         String productName = null;
-        int quantity = 1;
+        var quantity = 1;
         Map<String, CartItem> shoppingCart = new HashMap<>();
 
         // Act
@@ -135,8 +135,8 @@ class ProductValidatorTest {
     void validateRemoval_withEmptyProductName_returnsError() {
 
         // Arrange
-        String productName = "";
-        int quantity = 1;
+        var productName = "";
+        var quantity = 1;
         Map<String, CartItem> shoppingCart = new HashMap<>();
 
         // Act
@@ -150,8 +150,8 @@ class ProductValidatorTest {
     void validateRemoval_withInvalidProductName_returnsError() {
 
         // Arrange
-        String productName = "InvalidProduct";
-        int quantity = 1;
+        var productName = "InvalidProduct";
+        var quantity = 1;
         Map<String, CartItem> shoppingCart = new HashMap<>();
 
         // Act
@@ -165,8 +165,8 @@ class ProductValidatorTest {
     void validateRemoval_withProductNotInCart_returnsError() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = 1;
+        var productName = ProductName.CHEERIOS;
+        var quantity = 1;
         Map<String, CartItem> shoppingCart = new HashMap<>();
 
         // Act
@@ -180,8 +180,8 @@ class ProductValidatorTest {
     void validateRemoval_withZeroQuantity_returnsError() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = 0;
+        var productName = ProductName.CHEERIOS;
+        var quantity = 0;
         Map<String, CartItem> shoppingCart = createCartWithItem(productName, 5);
 
         // Act
@@ -195,8 +195,8 @@ class ProductValidatorTest {
     void validateRemoval_withNegativeQuantity_returnsError() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = -1;
+        var productName = ProductName.CHEERIOS;
+        var quantity = -1;
         Map<String, CartItem> shoppingCart = createCartWithItem(productName, 5);
 
         // Act
@@ -210,8 +210,8 @@ class ProductValidatorTest {
     void validateRemoval_withQuantityExceedingCartQuantity_returnsError() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = 10;
+        var productName = ProductName.CHEERIOS;
+        var quantity = 10;
         Map<String, CartItem> shoppingCart = createCartWithItem(productName, 5);
 
         // Act
@@ -225,9 +225,9 @@ class ProductValidatorTest {
     void validateRemoval_withValidProductAndQuantity_returnsEmptyString() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = 3;
-        Map<String, CartItem> shoppingCart = createCartWithItem(productName, 5);
+        var productName = ProductName.CHEERIOS;
+        var quantity = 3;
+        var shoppingCart = createCartWithItem(productName, 5);
 
         // Act
         String result = sut.validateRemoval(productName, quantity, shoppingCart);
@@ -240,9 +240,9 @@ class ProductValidatorTest {
     void validateRemoval_withExactCartQuantity_returnsEmptyString() {
 
         // Arrange
-        String productName = ProductName.CHEERIOS;
-        int quantity = 5;
-        Map<String, CartItem> shoppingCart = createCartWithItem(productName, 5);
+        var productName = ProductName.CHEERIOS;
+        var quantity = 5;
+        var shoppingCart = createCartWithItem(productName, 5);
 
         // Act
         String result = sut.validateRemoval(productName, quantity, shoppingCart);
@@ -252,12 +252,16 @@ class ProductValidatorTest {
     }
 
     private Map<String, CartItem> createCartWithItem(String productName, int quantity) {
+
         Map<String, CartItem> cart = new HashMap<>();
-        CartItem item = new CartItem();
+
+        var item = new CartItem();
+
         item.setProductName(productName);
         item.setQuantity(quantity);
         item.setPrice(1.0);
         cart.put(productName, item);
+
         return cart;
     }
 }

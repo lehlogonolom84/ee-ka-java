@@ -1,17 +1,17 @@
 package com.shoppingcart.implementations;
 
-import com.shoppingcart.interfaces.ProductValidator;
+import com.shoppingcart.interfaces.ShoppingCartValidator;
 import com.shoppingcart.interfaces.ProductCatalog;
 import com.shoppingcart.models.CartItem;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class ProductValidatorImpl implements ProductValidator {
+public class ShoppingCartValidatorImpl implements ShoppingCartValidator {
 
     private final ProductCatalog productCatalog;
 
-    public ProductValidatorImpl(ProductCatalog productCatalog) {
+    public ShoppingCartValidatorImpl(ProductCatalog productCatalog) {
         this.productCatalog = productCatalog;
     }
 

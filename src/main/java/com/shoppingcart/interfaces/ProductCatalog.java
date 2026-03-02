@@ -1,6 +1,6 @@
 package com.shoppingcart.interfaces;
 
 public interface ProductCatalog {
-    double get(String productName);
+    double getPrice(String productName);
     String[] getAllProductNames();
 }
