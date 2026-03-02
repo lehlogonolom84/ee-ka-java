@@ -2,7 +2,7 @@ package com.shoppingcart.models;
 
 import java.time.Instant;
 
-public class    CacheEntry {
+public class CacheEntry {
     private final Object value;
     private final Instant expiresAtUtc;
 

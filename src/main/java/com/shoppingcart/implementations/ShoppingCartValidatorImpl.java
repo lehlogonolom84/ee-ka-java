@@ -9,15 +9,17 @@ import java.util.Map;
 
 public class ShoppingCartValidatorImpl implements ShoppingCartValidator {
 
-    private final ProductCatalog productCatalog;
+    ProductCatalog productCatalog;
 
     public ShoppingCartValidatorImpl(ProductCatalog productCatalog) {
+
         this.productCatalog = productCatalog;
     }
 
     @Override
     public String validateAdd(String productName, int quantity) {
-        String productNameError = validateProductName(productName);
+
+        var productNameError = validateProductName(productName);
         if (!productNameError.isEmpty()) {
             return productNameError;
         }
@@ -28,24 +30,31 @@ public class ShoppingCartValidatorImpl implements ShoppingCartValidator {
     @Override
     public String validateRemoval(String productName, int quantity, Map<String, CartItem> shoppingCart) {
 
-        String error="";
+        var error="";
 
         error = validateProductName(productName);
+
         if (!error.isEmpty()) {
+
             return error;
         }
 
         if (!shoppingCart.containsKey(productName)) {
+
             return "Product '" + productName + "' is not in the shopping cart.";
         }
 
         error = validateQuantity(quantity);
+
         if (!error.isEmpty()) {
+
             return error;
         }
 
-        int cartQuantity = shoppingCart.get(productName).getQuantity();
+        var cartQuantity = shoppingCart.get(productName).getQuantity();
+
         if (quantity > cartQuantity) {
+
             return "Cannot remove " + quantity + " of '" + productName + "' as only " + cartQuantity + " are in the cart.";
         }
 
@@ -55,10 +64,12 @@ public class ShoppingCartValidatorImpl implements ShoppingCartValidator {
     private String validateProductName(String productName) {
 
         if (productName == null || productName.isEmpty()) {
+
             return "Product name cannot be empty.";
         }
 
         if (!isValidProduct(productName)) {
+
             return "Product name '" + productName + "' is not valid.";
         }
 
@@ -66,14 +77,18 @@ public class ShoppingCartValidatorImpl implements ShoppingCartValidator {
     }
 
     private String validateQuantity(int quantity) {
+
         if (quantity <= 0) {
+
             return "Quantity must be greater than zero.";
         }
         return "";
     }
 
     private boolean isValidProduct(String productName) {
-        String[] validProducts = productCatalog.getAllProductNames();
+
+        var validProducts = productCatalog.getAllProductNames();
+
         return Arrays.asList(validProducts).contains(productName);
     }
 }

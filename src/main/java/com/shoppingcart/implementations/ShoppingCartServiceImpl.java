@@ -17,14 +17,12 @@ import java.util.Map;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     Map<String, Map<String, CartItem>> carts;
-
     ProductCatalog productCatalog;
-
     ShoppingCartValidator shoppingCartValidator;
-
     double taxRate;
 
     public ShoppingCartServiceImpl(ConfigProvider configProvider, ProductCatalog productCatalog, ShoppingCartValidator shoppingCartValidator) {
+
         this.productCatalog = productCatalog;
         this.shoppingCartValidator = shoppingCartValidator;
         this.carts = new HashMap<>();
@@ -32,16 +30,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private Map<String, CartItem> getOrCreateCart(String cartId) {
+
         return carts.computeIfAbsent(cartId, k -> new HashMap<>());
     }
 
     @Override
     public CartActionResult addItem(String cartId, String productName, int quantity) {
-        var addActionResult = new CartActionResult();
 
+        var addActionResult = new CartActionResult();
         var validationResults = shoppingCartValidator.validateAdd(productName, quantity);
 
         if (validationResults != null && !validationResults.isEmpty()) {
+
             addActionResult.setMessage(validationResults);
             return addActionResult;
         }
@@ -50,12 +50,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         var price = productCatalog.getPrice(productName);
 
         if (!shoppingCart.containsKey(productName)) {
+
             var cartItem = new CartItem();
+
             cartItem.setPrice(price);
             cartItem.setQuantity(quantity);
             cartItem.setProductName(productName);
             shoppingCart.put(productName, cartItem);
         } else {
+
             var shoppingCartItem = shoppingCart.get(productName);
             shoppingCartItem.setQuantity(shoppingCartItem.getQuantity() + quantity);
         }
@@ -64,22 +67,27 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public CartActionResult removeItem(String cartId, String productName, int quantity) {
-        var removeActionResult = new CartActionResult();
 
+        var removeActionResult = new CartActionResult();
         var shoppingCart = getOrCreateCart(cartId);
         var validationResults = shoppingCartValidator.validateRemoval(productName, quantity, shoppingCart);
 
         if (validationResults != null && !validationResults.isEmpty()) {
+
             removeActionResult.setMessage(validationResults);
             return removeActionResult;
         }
 
         if (shoppingCart.containsKey(productName)) {
+
             var shoppingCartItem = shoppingCart.get(productName);
-            int newQuantity = shoppingCartItem.getQuantity() - quantity;
+            var newQuantity = shoppingCartItem.getQuantity() - quantity;
+
             if (newQuantity <= 0) {
+
                 shoppingCart.remove(productName);
             } else {
+
                 shoppingCartItem.setQuantity(newQuantity);
             }
         }
@@ -88,18 +96,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Cart getCart(String cartId) {
+
         var shoppingCart = getOrCreateCart(cartId);
 
-        Cart cart = new Cart();
+        var cart = new Cart();
         cart.setCartId(cartId);
         cart.setItems(shoppingCart.values().toArray(new CartItem[0]));
 
-        double subTotal = shoppingCart.values().stream()
+        var subTotal = shoppingCart.values().stream()
                 .mapToDouble(CartItem::getTotalPrice)
                 .sum();
         cart.setSubTotal(subTotal);
 
-        BigDecimal tax = BigDecimal.valueOf(subTotal * taxRate)
+        var tax = BigDecimal.valueOf(subTotal * taxRate)
                 .setScale(DecimalPlaces.TWO, RoundingMode.HALF_UP);
         cart.setTax(tax.doubleValue());
 

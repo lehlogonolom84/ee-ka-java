@@ -43,7 +43,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withValidProduct_returnsConsistentPriceOnMultipleCalls() {
+    void getPrice_withValidProduct_returnsConsistentPriceOnMultipleCalls() {
         // Arrange
         String productName = ProductName.CHEERIOS;
 
@@ -56,7 +56,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_forEachProductFromGetPriceAllProductNames_returnsValidPrice() {
+    void getPrice_forEachProductFromGetPriceAllProductNames_returnsValidPrice() {
         // Arrange
         String[] allProducts = sut.getAllProductNames();
 
@@ -70,7 +70,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_multipleConcurrentCalls_returnConsistentResults() {
+    void getPrice_multipleConcurrentCalls_returnConsistentResults() {
         // Arrange
         String productName = ProductName.WEETABIX;
 
@@ -84,7 +84,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_afterFirstCall_returnsCachedValue() {
+    void getPrice_afterFirstCall_returnsCachedValue() {
         // Arrange
         String productName = ProductName.CHEERIOS;
         String cacheKey = CachePrefix.PRODUCT_PRICE + productName;
@@ -99,7 +99,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withPrePopulatedCache_returnsCachedValueWithoutApiCall() {
+    void getPrice_withPrePopulatedCache_returnsCachedValueWithoutApiCall() {
         // Arrange
         String productName = ProductName.CORNFLAKES;
         String cacheKey = CachePrefix.PRODUCT_PRICE + productName;
@@ -114,7 +114,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withDifferentProducts_cachesSeparately() {
+    void getPrice_withDifferentProducts_cachesSeparately() {
         // Arrange
         String productName1 = ProductName.CHEERIOS;
         String productName2 = ProductName.FROSTIES;
@@ -135,7 +135,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withNullProductName_throwsRuntimeException() {
+    void getPrice_withNullProductName_throwsRuntimeException() {
         // Arrange
         String productName = null;
 
@@ -146,7 +146,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withEmptyProductName_throwsRuntimeException() {
+    void getPrice_withEmptyProductName_throwsRuntimeException() {
         // Arrange
         String productName = "";
 
@@ -157,7 +157,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withBlankProductName_throwsRuntimeException() {
+    void getPrice_withBlankProductName_throwsRuntimeException() {
         // Arrange
         String productName = "   ";
 
@@ -168,7 +168,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withNonExistentProduct_throwsRuntimeException() {
+    void getPrice_withNonExistentProduct_throwsRuntimeException() {
         // Arrange
         String productName = "nonexistent-product-xyz";
 
@@ -179,7 +179,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withSpecialCharactersInProductName_throwsRuntimeException() {
+    void getPrice_withSpecialCharactersInProductName_throwsRuntimeException() {
         // Arrange
         String productName = "product<>with/special?chars";
 
@@ -190,7 +190,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withProductNameContainingSpaces_throwsRuntimeException() {
+    void getPrice_withProductNameContainingSpaces_throwsRuntimeException() {
         // Arrange
         String productName = "product with spaces";
 
@@ -201,7 +201,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withUppercaseProductName_throwsRuntimeException() {
+    void getPrice_withUppercaseProductName_throwsRuntimeException() {
         // Arrange
         String productName = "CHEERIOS";
 
@@ -212,7 +212,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void get_Price_withMixedCaseProductName_throwsRuntimeException() {
+    void getPrice_withMixedCaseProductName_throwsRuntimeException() {
         // Arrange
         String productName = "Cheerios";
 
@@ -223,7 +223,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_returnsAllKnownProducts() {
+    void getAllProductNames_returnsAllKnownProducts() {
         // Arrange
         String[] expectedProducts = {
                 ProductName.CHEERIOS,
@@ -244,7 +244,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_containsCheerios() {
+    void getAllProductNames_containsCheerios() {
         // Arrange - nothing to arrange
 
         // Act
@@ -255,7 +255,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_doesNotContainDuplicates() {
+    void getAllProductNames_doesNotContainDuplicates() {
         // Arrange - nothing to arrange
 
         // Act
@@ -266,7 +266,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_doesNotContainEmptyStrings() {
+    void getAllProductNames_doesNotContainEmptyStrings() {
         // Arrange - nothing to arrange
 
         // Act
@@ -277,7 +277,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_returnsNewArrayOnEachCall() {
+    void getAllProductNames_returnsNewArrayOnEachCall() {
         // Arrange - nothing to arrange
 
         // Act
@@ -290,7 +290,7 @@ class ProductCatalogImplTest {
     }
 
     @Test
-    void getPriceAllProductNames_returnedProductsAreAllLowercase() {
+    void getAllProductNames_returnedProductsAreAllLowercase() {
         // Arrange - nothing to arrange
 
         // Act

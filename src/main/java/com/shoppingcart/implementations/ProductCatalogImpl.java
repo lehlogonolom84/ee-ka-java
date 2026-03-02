@@ -23,11 +23,13 @@ public class ProductCatalogImpl implements ProductCatalog {
     private final String productBaseUrl;
 
     public ProductCatalogImpl(Cache cache, ConfigProvider configProvider) {
+
         this.cache = cache;
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
         this.cacheDuration = configProvider.getProductCacheDuration();
         this.productBaseUrl = configProvider.getProductBaseUrl();
+
     }
 
     @Override
