@@ -101,5 +101,6 @@ AI tools were used to assist with generating boilerplate code and repetitive imp
 **Percentage of AI-generated code in test: 49.85%**
 
 ### 3. How AI Code Was Reviewed
-All AI-generated code was manually reviewed to ensure correctness, adherence to project coding standards, and alignment with the overall architecture. Unit tests were written to validate the functionality of AI-generated components, and code coverage metrics were used to ensure adequate test coverage.
+All AI-generated code was manually reviewed to ensure correctness, adherence to project coding standards, and alignment with the overall architecture. 
+Further code coverage metrics were used to ensure 100% test coverage is adhered when code is pushed or pull request created.
 
